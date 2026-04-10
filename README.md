@@ -2,6 +2,8 @@
 
 Projet d'examen realise avec Django pour le Master 2 MICDA.
 
+Realiser Par Papa Sidy Fall et Bara Mamadou Lamine Ndiaye
+
 ## Fonctionnalites livrees
 
 - affichage de la liste des articles sur la page d'accueil
