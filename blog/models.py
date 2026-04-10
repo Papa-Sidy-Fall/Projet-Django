@@ -41,3 +41,4 @@ class Article(models.Model):
     @property
     def est_publie(self):
         return self.statut == StatutPublication.PUBLIE
+
