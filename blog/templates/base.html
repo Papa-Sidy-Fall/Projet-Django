@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Blog MICDA{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="container nav-row">
+            <a class="brand" href="{% url 'blog:article_list' %}">Blog MICDA</a>
+            <nav class="nav-links">
+                <a href="{% url 'blog:article_list' %}">Articles</a>
+                {% if request.user.is_staff %}
+                    <a href="{% url 'blog:article_create' %}">Nouvel article</a>
+                    <a href="{% url 'admin:index' %}">Administration</a>
+                    <form action="{% url 'blog:logout' %}" method="post" class="nav-logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="nav-button">Deconnexion</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'admin:login' %}?next={% url 'blog:article_list' %}">Connexion admin</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    {% if messages %}
+        <div class="container flash-stack">
+            {% for message in messages %}
+                <div class="flash flash-{{ message.tags|default:'info' }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <main class="site-main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>Master 2 MICDA | Projet Django Blog</p>
+        </div>
+    </footer>
+</body>
+</html>

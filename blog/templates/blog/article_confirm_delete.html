@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Supprimer {{ object.titre }} | Blog MICDA{% endblock %}
+
+{% block content %}
+    <section class="container section-space">
+        <div class="confirm-shell">
+            <p class="eyebrow">Suppression</p>
+            <h1>Supprimer cet article ?</h1>
+            <p class="confirm-text">
+                Cette action retirera definitivement <strong>{{ object.titre }}</strong> du blog.
+            </p>
+            <div class="confirm-preview">
+                <img
+                    src="{% if object.image %}{{ object.image.url }}{% else %}{% static 'images/blog-placeholder.png' %}{% endif %}"
+                    alt="{{ object.titre }}"
+                >
+                <div>
+                    <p><strong>Auteur :</strong> {{ object.auteur.get_full_name|default:object.auteur.username }}</p>
+                    <p><strong>Publication :</strong> {{ object.date_publication|date:"d/m/Y H:i" }}</p>
+                </div>
+            </div>
+            <form method="post" class="delete-form">
+                {% csrf_token %}
+                <button class="button button-danger" type="submit">Confirmer la suppression</button>
+                <a class="button button-secondary" href="{% url 'blog:article_detail' object.pk %}">Annuler</a>
+            </form>
+        </div>
+    </section>
+{% endblock %}

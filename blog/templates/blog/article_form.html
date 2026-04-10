@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {% if object %}Modifier {{ object.titre }}{% else %}Nouvel article{% endif %} | Blog MICDA
+{% endblock %}
+
+{% block content %}
+    <section class="container section-space">
+        <div class="form-shell">
+            <div class="section-heading">
+                <p class="eyebrow">Administration</p>
+                {% if object %}
+                    <h1>Modifier l'article</h1>
+                {% else %}
+                    <h1>Creer un article</h1>
+                {% endif %}
+            </div>
+
+            <form method="post" enctype="multipart/form-data" class="article-form">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                {% for field in form %}
+                    <div class="form-field">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <small>{{ field.help_text }}</small>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <p class="field-error">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <div class="form-actions">
+                    <button class="button button-primary" type="submit">Enregistrer</button>
+                    {% if object %}
+                        <a class="button button-secondary" href="{% url 'blog:article_detail' object.pk %}">Annuler</a>
+                    {% else %}
+                        <a class="button button-secondary" href="{% url 'blog:article_list' %}">Annuler</a>
+                    {% endif %}
+                </div>
+            </form>
+        </div>
+    </section>
+{% endblock %}

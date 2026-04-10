@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ article.titre }} | Blog MICDA{% endblock %}
+
+{% block content %}
+    <section class="article-hero">
+        <div class="container article-hero-grid">
+            <div class="article-summary">
+                <p class="eyebrow">Article</p>
+                <h1>{{ article.titre }}</h1>
+                <div class="post-meta">
+                    <span>{{ article.date_publication|date:"d/m/Y H:i" }}</span>
+                    <span>{{ article.auteur.get_full_name|default:article.auteur.username }}</span>
+                    {% if article.statut == "draft" %}
+                        <span class="badge badge-draft">Brouillon</span>
+                    {% else %}
+                        <span class="badge badge-published">Publie</span>
+                    {% endif %}
+                </div>
+                {% if request.user.is_staff %}
+                    <div class="detail-actions">
+                        <a class="button button-secondary" href="{% url 'blog:article_update' article.pk %}">Modifier</a>
+                        <a class="button button-danger" href="{% url 'blog:article_delete' article.pk %}">Supprimer</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="hero-media">
+                <img
+                    src="{% if article.image %}{{ article.image.url }}{% else %}{% static 'images/blog-placeholder.png' %}{% endif %}"
+                    alt="{{ article.titre }}"
+                >
+            </div>
+        </div>
+    </section>
+
+    <section class="container section-space article-body">
+        {{ article.contenu|linebreaks }}
+    </section>
+{% endblock %}
